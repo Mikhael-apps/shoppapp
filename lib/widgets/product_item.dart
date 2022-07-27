@@ -44,6 +44,18 @@ class ProductItemWidget extends StatelessWidget {
           trailing: IconButton(
             onPressed: () {
               cart.addCartItems(product.id, product.title, product.price);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                duration: Duration(seconds: 2),
+                content: Text('Added to cart'),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    cart.removeSingleItem(product.id);
+                  },
+                ),
+                ),
+                );
             },
             icon: Icon(Icons.shopping_cart),
             color: Theme.of(context).accentColor,
