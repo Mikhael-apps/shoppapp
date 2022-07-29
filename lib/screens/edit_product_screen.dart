@@ -27,6 +27,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     'imageUrl': '',
   };
   var isInit = true;
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -43,19 +44,44 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveForm() {
+    setState(() {
+      _isLoading = true;
+    });
+    
     final isValid = _form.currentState!.validate();
     if(!isValid) {
       return;
     }
     _form.currentState!.save();
     if(_editProduct.id != null) {
-      Provider.of<Products>(context, listen: false).addProduct(_editProduct);
+      Provider.of<Products>(context, listen: false)
+      .addProduct(_editProduct)
+      .catchError((error) {
+        return showDialog(context: context, builder: (context) => AlertDialog(
+          title: const Text('An error occurred!'), content: const Text('Something went wrong'),
+          actions: <Widget>[
+            FlatButton(child: const Text('Okay'), onPressed: () {
+              // Navigator.of(context).pop();
+              print('warning');
+            },)
+          ],
+        ));
+      })
+      .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.pop(context);
+      });
     } else {
       Provider.of<Products>(context, listen: false).updateProduct(_editProduct.id, _editProduct);
+      setState(() {
+        _isLoading = false;
+      });
       
     }
     
-    Navigator.pop(context);
+    // Navigator.pop(context);
     // print(_editProduct.title);
     // print(_editProduct.price);
     // print(_editProduct..imageUrl);
@@ -105,7 +131,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           IconButton(onPressed: _saveForm, icon: Icon(Icons.save)),
         ],
       ),
-      body: Padding(
+      body: _isLoading ? Center(child: CircularProgressIndicator(),) : Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
             key: _form,
