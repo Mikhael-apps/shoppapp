@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shoppapp/provider/product.dart';
+import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
   final List<Product> _items = [
@@ -68,6 +70,16 @@ class Products with ChangeNotifier {
 
   void addProduct(Product product) {
     // _items.add(product);
+    // const url = 'https://shopapp-67412-default-rtdb.firebaseio.com/products.json';
+    var url = Uri.parse('https://shopapp-67412-default-rtdb.firebaseio.com/products.json');
+    http.post(url, body: json.encode({
+      'title': product.title,
+      'description': product.description,
+      'price': product.price,
+      'imageUrl': product.imageUrl,
+      'isFavorite': product.isFavorite,
+    }));
+    print('Added Product http');
     final newProducts = Product(
         id: DateTime.now().toString(),
         title: product.title,
@@ -75,6 +87,7 @@ class Products with ChangeNotifier {
         price: product.price,
         imageUrl: product.imageUrl);
         _items.add(newProducts);
+        print('Added Product');
         // _items.insert(0, newProducts); at the start of the list
     notifyListeners();
   }
@@ -86,7 +99,7 @@ class Products with ChangeNotifier {
     _items[productsData] = newProduct;
     notifyListeners();
    } else {
-    print('...');
+    print('...updated');
    }
   }
 
