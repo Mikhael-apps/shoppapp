@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shoppapp/provider/product.dart';
 
-
 class Products with ChangeNotifier {
   final List<Product> _items = [
     Product(
@@ -49,7 +48,7 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
-  Product findById(String id){
+  Product findById(String id) {
     return _items.firstWhere((data) => data.id == id);
   }
 
@@ -68,9 +67,31 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(Product product) {
-    _items.add(product);
+    // _items.add(product);
+    final newProducts = Product(
+        id: DateTime.now().toString(),
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl);
+        _items.add(newProducts);
+        // _items.insert(0, newProducts); at the start of the list
     notifyListeners();
   }
 
+  void updateProduct(String id, Product newProduct) {
+   final productsData = _items.indexWhere((data) => data.id == id); // what is it indexWhere?
+   
+   if(productsData >= 0){
+    _items[productsData] = newProduct;
+    notifyListeners();
+   } else {
+    print('...');
+   }
+  }
 
+  void deleteProduct(String id) {
+    _items.removeWhere((data) => data.id == id);
+    notifyListeners();
+  }
 }

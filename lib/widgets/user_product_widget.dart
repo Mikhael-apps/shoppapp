@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shoppapp/provider/products.dart';
+
+import '../screens/edit_product_screen.dart';
 
 class UserProductWidget extends StatelessWidget {
+  final String id;
   final String title;
   final String imageUrl;
+  
 
-  UserProductWidget(this.title, this.imageUrl);
+  UserProductWidget(this.id, this.title, this.imageUrl);
   // const UserProductWidget({Key? key}) : super(key: key);
 
   @override
@@ -19,8 +25,12 @@ class UserProductWidget extends StatelessWidget {
         width: 100,
         child: Row(
           children: <Widget>[
-            IconButton(onPressed: () {}, icon: Icon(Icons.edit, color: Theme.of(context).primaryColor,)),
-            IconButton(onPressed: () {}, icon: Icon(Icons.delete, color: Theme.of(context).errorColor,)),
+            IconButton(onPressed: () {
+              Navigator.pushNamed(context, EditProductScreen.routName, arguments: id);
+            }, icon: Icon(Icons.edit, color: Theme.of(context).primaryColor,)),
+            IconButton(onPressed: () {
+              Provider.of<Products>(context, listen: false).deleteProduct(id);
+            }, icon: Icon(Icons.delete, color: Theme.of(context).errorColor,)),
           ],
         ),
       ),

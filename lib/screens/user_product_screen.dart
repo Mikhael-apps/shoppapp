@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppapp/provider/products.dart';
+import 'package:shoppapp/screens/edit_product_screen.dart';
 import 'package:shoppapp/widgets/app_drawer.dart';
 import 'package:shoppapp/widgets/user_product_widget.dart';
 
@@ -17,7 +18,9 @@ class UserProductScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Products'),
         actions: <Widget>[
-          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+          IconButton(onPressed: () {
+            Navigator.pushNamed(context, EditProductScreen.routName);
+          }, icon: const Icon(Icons.add)),
         ],
       ),
       body: Padding(
@@ -27,6 +30,7 @@ class UserProductScreen extends StatelessWidget {
           itemBuilder: (_, index) => Column(
             children: [
               UserProductWidget(
+                productData.items[index].id,
                 productData.items[index].title,
                 productData.items[index].imageUrl,
               ),
