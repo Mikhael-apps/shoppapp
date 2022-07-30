@@ -71,7 +71,7 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     // _items.add(product);
     // const url = 'https://shopapp-67412-default-rtdb.firebaseio.com/products.json';
-    var url = Uri.parse('https://shopapp-67412-default-rtdb.firebaseio.com/products');
+    var url = Uri.parse('https://shopapp-67412-default-rtdb.firebaseio.com/products.json');
     try {
     final response = await http.post(url, body: json.encode({
       'title': product.title,
