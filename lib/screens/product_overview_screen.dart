@@ -32,7 +32,30 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
     
   }
   var _showFavorites = false;
+  var _isInit = true;
   // const ProductOverViewScreen({Key? key}) : super(key: key);
+
+  // loadData from http
+  @override
+  void initState() {
+    // Provider.of<Products>(context).fetchAndSetProducts(); // This not working
+    // Future.delayed(Duration.zero).then((data) {
+    //   Provider.of<Products>(context, listen: false).fetchAndSetProducts();
+    // });
+    // TODO: implement initState
+
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    if(_isInit) {
+      Provider.of<Products>(context).fetchAndSetProducts();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     // final productsContainer= Provider.of<Products>(context, listen: false);
@@ -78,7 +101,7 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
           
         ],
       ),
-      drawer: AppDrawerWidget(),
+      drawer: const AppDrawerWidget(),
       body: ProductsGrid(_showFavorites),
     );
   }
