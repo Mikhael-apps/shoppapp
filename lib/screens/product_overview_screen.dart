@@ -50,10 +50,10 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-    if(_isInit) {
-      Provider.of<Products>(context).fetchAndSetProducts();
-    }
-    _isInit = false;
+    // if(_isInit) {
+    //   Provider.of<Products>(context).fetchAndSetProducts();
+    // }
+    // _isInit = false;
     super.didChangeDependencies();
   }
   @override

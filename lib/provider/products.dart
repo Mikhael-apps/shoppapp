@@ -124,15 +124,17 @@ class Products with ChangeNotifier {
       throw error;
     }
       
-        print('Added Product');
+        
         // _items.insert(0, newProducts); at the start of the list
     
   
       // print(error);
    
-    print('Added Product http');
+   
     
   }
+
+  
 
   void updateProduct(String id, Product newProduct) {
    final productsData = _items.indexWhere((data) => data.id == id); // what is it indexWhere?
