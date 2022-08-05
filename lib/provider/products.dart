@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shoppapp/models/http_exception.dart';
 import 'package:shoppapp/provider/product.dart';
 import 'package:http/http.dart' as http;
 
@@ -154,23 +155,24 @@ class Products with ChangeNotifier {
    }
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     var url = Uri.parse('http://shopapp-67412-default-rtdb.firebaseio.com/products/$id.json');
     var existingProductsIndex = _items.indexWhere((data) => data.id == id);
     Product? existingProduct = _items[existingProductsIndex];
     _items.removeAt(existingProductsIndex);
-    notifyListeners();
-    http.delete(url).then((response) {
+    _items.insert(existingProductsIndex, existingProduct as Product);
+      notifyListeners();
+    final response = http.delete(url).then((response) {
       // print(response.statusCode);
       if(response.statusCode >= 400) {
         
+        throw HttpException('Could not delete product');
       }
       existingProduct = null;
-    }).catchError((_) {
-      _items.insert(existingProductsIndex, existingProduct as Product);
+      _items.removeWhere((data) => data.id == id);
       notifyListeners();
+      
     });
-    _items.removeWhere((data) => data.id == id);
-    notifyListeners();
+   
   }
 }
