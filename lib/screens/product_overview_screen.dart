@@ -33,6 +33,7 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   }
   var _showFavorites = false;
   var _isInit = true;
+  var _isLoading = false;
   // const ProductOverViewScreen({Key? key}) : super(key: key);
 
   // loadData from http
@@ -50,10 +51,17 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-    // if(_isInit) {
-    //   Provider.of<Products>(context).fetchAndSetProducts();
-    // }
-    // _isInit = false;
+    if(_isInit) {
+      setState(() {
+        _isLoading= true;
+      });
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+        setState(() {
+          _isLoading=false;
+        });
+      });
+    }
+    _isInit = false;
     super.didChangeDependencies();
   }
   @override
@@ -102,7 +110,7 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
         ],
       ),
       drawer: const AppDrawerWidget(),
-      body: ProductsGrid(_showFavorites),
+      body: _isLoading ? Center(child: CircularProgressIndicator()) : ProductsGrid(_showFavorites),
     );
   }
 }
