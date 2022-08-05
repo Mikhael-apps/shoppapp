@@ -140,7 +140,7 @@ class Products with ChangeNotifier {
    final productsData = _items.indexWhere((data) => data.id == id); // what is it indexWhere?
    
    if(productsData >= 0){
-    var url = Uri.parse('http://shopapp-67412-default-rtdb.firebaseio.com/$id.json');
+    var url = Uri.parse('http://shopapp-67412-default-rtdb.firebaseio.com/products/$id.json');
     await http.patch(url, body: json.encode({
       'title': newProduct.title,
       'description': newProduct.description,
@@ -155,6 +155,21 @@ class Products with ChangeNotifier {
   }
 
   void deleteProduct(String id) {
+    var url = Uri.parse('http://shopapp-67412-default-rtdb.firebaseio.com/products/$id.json');
+    var existingProductsIndex = _items.indexWhere((data) => data.id == id);
+    Product? existingProduct = _items[existingProductsIndex];
+    _items.removeAt(existingProductsIndex);
+    notifyListeners();
+    http.delete(url).then((response) {
+      // print(response.statusCode);
+      if(response.statusCode >= 400) {
+        
+      }
+      existingProduct = null;
+    }).catchError((_) {
+      _items.insert(existingProductsIndex, existingProduct as Product);
+      notifyListeners();
+    });
     _items.removeWhere((data) => data.id == id);
     notifyListeners();
   }
