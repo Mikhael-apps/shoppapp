@@ -136,10 +136,17 @@ class Products with ChangeNotifier {
 
   
 
-  void updateProduct(String id, Product newProduct) {
+  Future<void> updateProduct(String id, Product newProduct) async {
    final productsData = _items.indexWhere((data) => data.id == id); // what is it indexWhere?
    
    if(productsData >= 0){
+    var url = Uri.parse('http://shopapp-67412-default-rtdb.firebaseio.com/$id.json');
+    await http.patch(url, body: json.encode({
+      'title': newProduct.title,
+      'description': newProduct.description,
+      'price': newProduct.price,
+      'imageUrl': newProduct.imageUrl,
+    }));
     _items[productsData] = newProduct;
     notifyListeners();
    } else {

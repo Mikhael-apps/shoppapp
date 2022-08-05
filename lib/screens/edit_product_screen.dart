@@ -67,16 +67,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
             },)
           ],
         ));
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.pop(context);
-      }
+      } 
+      // finally {
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      //   Navigator.pop(context);
+      // }
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.pop(context);
         
       
     } else {
-      Provider.of<Products>(context, listen: false).updateProduct(_editProduct.id, _editProduct);
+     await Provider.of<Products>(context, listen: false).updateProduct(_editProduct.id, _editProduct);
       setState(() {
         _isLoading = false;
       });
